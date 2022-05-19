@@ -155,13 +155,13 @@ class RegisterUser:
                         self.gender, self.pesel,
                         self.phone_number, new_id, self.hash_password())
                 SqlConnection().create_user_data(user=user)
+                SqlConnection().create_table_for_user_account()
 
     @staticmethod
     def display_user_bank_id(pesel):
         conn = SqlConnection().create_connection()
-        bank_id = conn.execute(f"""SELECT bank_id FROM user WHERE pesel={pesel}""")
-        for i in bank_id:
-            print(f"Twój nr. id to {i[0]}")
+        bank_id = list(conn.execute(f"""SELECT bank_id FROM user WHERE pesel={pesel}"""))[-1]
+        print(f"Twój nr. id to {bank_id[0]}")
 
 
 class Login:
@@ -205,8 +205,7 @@ class AccountCashManagement:
 
     def deposit_cash(self):
         conn = SqlConnection().create_connection()
-        self.cash_withdrawal = None
-        self.cash_withdrawal_date = None
+        self.cash_withdrawal = 0
 
         with conn:
             form = (
@@ -218,8 +217,7 @@ class AccountCashManagement:
 
     def withdrawal_cash(self):
         conn = SqlConnection().create_connection()
-        self.cash_deposit = None
-        self.cash_deposit_date = None
+        self.cash_deposit = 0
 
         with conn:
             form = (
@@ -241,7 +239,7 @@ class AccountCashManagement:
                 balance = x[0] + y[0]
             except TypeError:
                 balance = x[0]
-        return round(balance, 2)
+        return balance
 
     @staticmethod
     def change_currency():
@@ -314,9 +312,8 @@ def check_password(passwd: str):
 
 
 def age_validation(age: int):
-    if len(str(age)) >= 3 or (age > 120):
-        print("Wiek musi być liczbą całkowitą\n"      
-              "oraz nie może przekraczać 3 cyfr.")
+    if age <= 3 or age >= 120:
+        print("Upewnij się, że wiek został dobrze wpisany.")
         return True
 
 

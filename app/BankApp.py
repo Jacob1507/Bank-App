@@ -1,5 +1,5 @@
 from app_db.db_validation import *
-
+import sys
 
 class BankApp:
 
@@ -31,7 +31,8 @@ class BankApp:
                 "withdrawal_cash": 3,
                 "deposit_in_diff_currency": 4,
                 "withdrawal_in_diff_currency": 5,
-                "last_transactions": 6
+                "last_transactions": 6,
+                "logout": 7
             }
 
             if msg == actions["acc_balance"]:
@@ -69,6 +70,10 @@ class BankApp:
 
             elif msg == actions['last_transactions']:
                 AccountCashManagement.last_transactions(user_id=user_id)
+
+            elif msg == actions["logout"]:
+                print("Papa :)")
+                sys.exit()
 
     def login_view(self):
         bank_id = int(input("Nr. Weryfikacyjny: "))
@@ -135,14 +140,14 @@ class BankApp:
                                     pesel=pesel,
                                     birth_date=birth_date,
                                     phone_number=phone_number,
-                                    password=check_password(password)
+                                    password=password
                                     )
                 # Jeśli użytkownik przejdzie weryfikacje zostaje dodany do dazy danych.
                 form.add_to_database()
                 form.display_user_bank_id(form.pesel)
+                break
 
             tries -= 1
-            print(tries)
 
 
 if __name__ == '__main__':
