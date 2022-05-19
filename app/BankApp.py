@@ -84,7 +84,12 @@ class BankApp:
     @staticmethod
     def register_model():
         status_ok = True
+        tries = 3
         while status_ok:
+            if tries == 0:
+                print("Wyczerpano wszystkie próby.")
+                break
+
             stop_registration = False
 
             name = None
@@ -136,6 +141,9 @@ class BankApp:
                 form.add_to_database()
                 form.display_user_bank_id(form.pesel)
 
+            tries -= 1
+            print(tries)
+
 
 if __name__ == '__main__':
 
@@ -148,7 +156,6 @@ if __name__ == '__main__':
         if message == choice['register']:
             try:
                 BankApp.register_model()
-                print('Restracja się powiodła.')
                 break
             except ValueError:
                 print('Odświeżyć stronę?(t/n)')
