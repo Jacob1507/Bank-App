@@ -371,7 +371,7 @@ def basic_pesel_validation(pesel: str, birth_date: str):
             return False
 
 
-def sex_validation(gender: str):
+def gender_validation(gender: str):
     options = ('male', 'female')
     if gender not in options:
         print('Sprawdź czy poprawnie została wpisana płeć')
